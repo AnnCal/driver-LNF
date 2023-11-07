@@ -8,6 +8,7 @@ class ColdLab:
         self.root.config(menu=self.menubar)
 
         self.modify_root_geometry()
+        self.create_instrument_menu()
         self.create_measurement_menu()
         self.create_calibration_menu()
         self.create_help_menu()
@@ -124,7 +125,8 @@ class ColdLab:
             self.result_label =tk.Label(root,text="")
             self.result_label.pack()
     """
-    
+    def RS():
+        pass
 
     def fidelity(self):
         
@@ -170,7 +172,6 @@ class ColdLab:
         for item in ["item 1 ","item2 ","item 3 ","item 4 "]:
             self.listbox.insert(tk.END,item)
         self.list_label.grid(sticky='W')
-        #self.listbox.pack()
         
     def create_help_menu(self):
         self.help_menu = tk.Menu(self.menubar,tearoff=0)
@@ -179,9 +180,23 @@ class ColdLab:
         self.help_menu.add_command(label="Exit", command=root.quit)
         self.menubar.add_cascade(label="Help",menu=self.help_menu)
 
+    def create_instrument_menu(self):
+        self.instrument_menu = tk.Menu(self.menubar, tearoff=0)
+        self.instrument_submenu = tk.Menu(self.instrument_menu)
+        self.instrument_submenu.add_command(label="RS_SMA100B",command=self.RS_SMA100B_instrument)
+        self.instrument_submenu.add_command(label="RS_SGS100A", command=self.RS_SGS100A_instrument)
+        self.instrument_menu.add_command(label="Signal Hound", command=self.Signal_Hound_instrument)
+        self.instrument_menu.add_command(label="National Board", command=self.National_instrument)
+        self.instrument_menu.add_command(label="Agilent", command=self.Agilent_33XXX_instrument) 
+        self.instrument_menu.add_cascade(label="RS",menu=self.instrument_submenu)
+        self.instrument_menu.add_separator()
+        self.instrument_menu.add_command(label="Exit", command=root.quit)
+        self.menubar.add_cascade(label="Instrument", menu=self.instrument_menu)
+        
+
+
     def create_measurement_menu(self):
-        # self.menubar = tk.Menu(root)
-        self.measurement_menu = tk.Menu(self.menubar, tearoff=0)
+        """ self.measurement_menu = tk.Menu(self.menubar, tearoff=0)
         self.measurement_menu.add_command(label="national", command=self.National_instrument)
         self.measurement_menu.add_command(label="RS_SMA100B", command=self.RS_SMA100B_instrument)
         self.measurement_menu.add_command(label="RS_SGS100A", command=self.RS_SGS100A_instrument)
@@ -190,24 +205,22 @@ class ColdLab:
         self.measurement_menu.add_separator()
         self.measurement_menu.add_command(label="Exit", command=root.quit)
         self.menubar.add_cascade(label="Instrument", menu=self.measurement_menu)
+        """
 
+        self.measurement_menu = tk.Menu(self.menubar, tearoff=0)
+        #self.measurement_menu.add_command(label="IQ", command=self.IQ_measurement)
+        self.measurement_menu.add_command(label="meas_2", command=self.meas_2_measurement)
+        self.measurement_menu.add_command(label="meas_3", command=self.meas_3_measurement)
+        self.menubar.add_cascade(label="Measurement", menu=self.measurement_menu)
+        self.measurement_menu.add_separator()
+        self.measurement_menu.add_command(label="Exit", command=root.quit)
 
-        measurement_menu = tk.Menu(self.menubar, tearoff=0)
-        measurement_menu.add_command(label="IQ", command=self.IQ_measurement)
-        measurement_menu.add_command(label="meas_2", command=self.meas_2_measurement)
-        measurement_menu.add_command(label="meas_3", command=self.meas_3_measurement)
-        measurement_menu.add_separator()
-        measurement_menu.add_command(label="Exit", command=root.quit)
-        self.menubar.add_cascade(label="Measurement", menu=measurement_menu)
+        self.measurement_submenu = tk.Menu(self.measurement_menu)
+        self.measurement_submenu.add_command(label="conf_1",command=self.configuration_1)
+        self.measurement_submenu.add_command(label="conf_2",command=self.configuration_2)
 
-        measurement_submenu = tk.Menu(measurement_menu)
-        measurement_submenu.add_command(label="conf_1",command=self.configuration_1)
-        measurement_submenu.add_command(label="conf_2",command=self.configuration_2)
-
-        measurement_menu.add_cascade(label="IQ",menu=measurement_submenu)
-        """measurement_submenu = tk.Menu(measurement_menu)
-        measurement_submenu.add_command(label='conf_1',command= configuration_1)
-        measurement_menu.add_cascade(label="IQ",menu=measurement_menu)"""
+        self.measurement_menu.add_cascade(label="IQ",menu=self.measurement_submenu)
+      
 
 
     def create_calibration_menu(self): 
@@ -263,7 +276,6 @@ class ColdLab:
         for parameter, entry in self.parameter_entries.items():
             self.value = entry.get()
             print(f"{parameter}: {self.value}")      
-        #self.parameter_entries = {}
         self.parameters = ["Parameter_1", "Parameter_2", "Parameter_3", "Parameter_4"]
         for parameter in self.parameters:
             self.label = tk.Label(self.new_window, text=parameter)
